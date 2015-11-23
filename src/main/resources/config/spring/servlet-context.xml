@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:beans="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <mvc:annotation-driven/>
+
+    <beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <beans:property name="order" value="2"/>
+    </beans:bean>
+
+    <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--<beans:property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
+        <beans:property name="order" value="1"/>
+        <beans:property name="prefix" value="/jsp/"/>
+        <beans:property name="suffix" value=".jsp"/>
+    </beans:bean>
+
+    <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <beans:property name="defaultLocale" value="ko"/>
+    </beans:bean>
+
+    <!--<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>-->
+
+    <!--<mvc:argument-resolvers>-->
+    <!--<bean class="org.springframework.mobile.device.DeviceWebArgumentResolver"/>-->
+    <!--</mvc:argument-resolvers>-->
+
+    <mvc:interceptors>
+        <beans:bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor"/>
+    </mvc:interceptors>
+
+    <context:component-scan base-package="ebp"/>
+
+    <beans:bean id="loggingAdvice" class="com.widetns.webapp.framework.aop.logging.LoggingAdvice"/>
+
+    <beans:bean id="requestValidatorAdvice" class="com.widetns.webapp.framework.aop.validation.RequestValidatorAdvice"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="requestValidator" ref="requestValidatorAdvice">
+            <aop:pointcut id="controllerMethod" expression="execution(* ebp..*Controller.*(..)))"/>
+            <aop:before method="invoke" pointcut-ref="controllerMethod"/>
+        </aop:aspect>
+
+        <aop:aspect id="aspectLogging" ref="loggingAdvice">
+            <aop:pointcut id="pointCutBefore" expression="execution(* ebp..*.*(..)))"/>
+            <aop:around method="loggingExecutionTime" pointcut-ref="pointCutBefore"/>
+            <aop:after-throwing method="loggingThrowing" throwing="exception" pointcut-ref="pointCutBefore"/>
+        </aop:aspect>
+
+        <aop:aspect id="aspectLogging1" ref="loggingAdvice">
+            <aop:pointcut id="pointCutBefore1" expression="execution(* com..*.*(..)))"/>
+            <aop:around method="loggingExecutionTime" pointcut-ref="pointCutBefore1"/>
+            <aop:after-throwing method="loggingThrowing" throwing="exception" pointcut-ref="pointCutBefore1"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!--<cache:annotation-driven cache-manager="cacheManager" />-->
+
+    <!--<beans:bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
+    <!--<beans:property name="cacheManager" ref="ehcache" />-->
+    <!--</beans:bean>-->
+
+    <!--<beans:bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" >-->
+    <!--<beans:property name="configLocation" value="classpath:ehcache.xml"></beans:property>-->
+    <!--<beans:property name="shared" value="true"/>-->
+    <!--</beans:bean>-->
+
+</beans:beans>
+
+

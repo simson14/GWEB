@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="reloadingStrategy" class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy"/>
+
+    <bean id="configuration" class="org.apache.commons.configuration.PropertiesConfiguration">
+        <constructor-arg type="java.lang.String" value="config/project/config.properties"/>
+        <property name="reloadingStrategy" ref="reloadingStrategy"/>
+    </bean>
+
+    <beans profile="dev">
+        <bean id="configuration" class="org.apache.commons.configuration.PropertiesConfiguration">
+            <constructor-arg type="java.lang.String" value="config/project/config.properties"/>
+            <property name="reloadingStrategy" ref="reloadingStrategy"/>
+        </bean>
+    </beans>
+
+    <beans profile="prod">
+        <bean id="configuration" class="org.apache.commons.configuration.PropertiesConfiguration">
+            <constructor-arg type="java.lang.String" value="config/project/config1.properties"/>
+            <property name="reloadingStrategy" ref="reloadingStrategy"/>
+        </bean>
+    </beans>
+
+</beans>

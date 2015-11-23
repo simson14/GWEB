@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oracle.general">
+
+    <select id="retrieveTableList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+
+        SELECT
+          TABLE_NAME AS tableName
+        FROM USER_TABLES
+        WHERE 1=1
+
+        ]]>
+    </select>
+
+    <select id="retrieveTableList2" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+                 A.TABLE_NAME
+                ,A.NUM_ROWS
+                ,B.COMMENTS
+            FROM USER_TABLES A, USER_TAB_COMMENTS B
+            WHERE 1=1
+                AND A.TABLE_NAME=B.TABLE_NAME(+)
+        ]]>
+        <if test='tableName != null'>AND A.TABLE_NAME LIKE #{tableName}||'%'</if>
+        <![CDATA[
+          ORDER BY A.TABLE_NAME
+        ]]>
+    </select>
+
+    <update id="updatePrdt" parameterType="hashmap">
+        <![CDATA[
+
+        UPDATE TB_STL_PRDT_BAS SET PRDT_NAME=PRDT_NAME
+        WHERE SYS_ID='SVC301' AND CNTRY_CODE='KR' AND ROWNUM=1
+
+        ]]>
+    </update>
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oracle.test">
+    <select id="retrieveTableList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+              TABLE_NAME,
+              COLUMN_NAME
+            FROM USER_TAB_COLUMNS
+            WHERE ROWNUM < 20
+        ]]>
+        <!--<if test='owner != null'> AND OWNER=#{owner}</if>-->
+    </select>
+</mapper>

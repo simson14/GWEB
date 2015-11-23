@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+
+
+    <!--<insertFromJNDI env-entry-name="java:spring.profiles.active" as="mode" />-->
+    <!--<property scope="context" name="mode" value="${application.home}"/>-->
+    <property scope="context" name="mode" value="${spring.profiles.active:-dev}"/>
+
+    <!--<property resource="${spring.profiles.active:-log4jdbc.log4j2.properties}" scope="context" name="mode"/>-->
+
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}] [%-4relative] [%-5level] [%35logger{35}] - [%msg] %n</pattern>
+        </encoder>
+    </appender>
+
+    <if condition='"${mode}".equals("prod")'>
+        <then>
+            <logger name="org.springframework" level="info">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="com.widetns" level="info">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="ebp" level="info">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <!--<logger name="jdbc.sqlonly" level="debug" >-->
+            <!--<appender-ref ref="console" />-->
+            <!--</logger>-->
+
+            <logger name="jdbc.resultset" level="off">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="jdbc.resultsettable" level="off">
+                <appender-ref ref="console"/>
+            </logger>
+
+
+            <logger name="jdbc.sqltiming" level="info">
+                <appender-ref ref="console"/>
+            </logger>
+        </then>
+        <else>
+            <logger name="org.springframework" level="eror">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="com.widetns" level="debug">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="ebp" level="debug">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <!--<logger name="jdbc.sqlonly" level="debug" >-->
+            <!--<appender-ref ref="console" />-->
+            <!--</logger>-->
+
+            <logger name="jdbc.resultset" level="off">
+                <appender-ref ref="console"/>
+            </logger>
+
+            <logger name="jdbc.resultsettable" level="debug">
+                <appender-ref ref="console"/>
+            </logger>
+
+
+            <logger name="jdbc.sqltiming" level="info">
+                <appender-ref ref="console"/>
+            </logger>
+
+        </else>
+    </if>
+
+</configuration>
