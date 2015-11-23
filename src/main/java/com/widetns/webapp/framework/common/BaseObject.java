@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,14 +38,26 @@ public class BaseObject implements BaseConstatns, Logger {
         return configuration.getString(key, "");
     }
 
+    /**
+     * logger Name Class의 Annotation 타입에 따라 Depth형 메시지 출력
+     *
+     * @param message
+     * @return
+     */
     private String getLoggerMessage(String message) {
-        if (llog.getName().contains(CONTROLLER)) {
-            return "\t" + LOG_PREFIX + message;
-        } else if (llog.getName().contains(SERVICE)) {
-            return "\t\t" + LOG_PREFIX + message;
-        } else if (llog.getName().contains(DAO)) {
-            return "\t\t\t" + LOG_PREFIX + message;
-        } else {
+
+        try {
+            Class clazz = Class.forName(llog.getName());
+            if (AnnotationUtils.findAnnotation(clazz, org.springframework.stereotype.Controller.class) != null) {
+                return "\t" + LOG_PREFIX + message;
+            } else if (AnnotationUtils.findAnnotation(clazz, org.springframework.stereotype.Service.class) != null) {
+                return "\t\t" + LOG_PREFIX + message;
+            } else if (AnnotationUtils.findAnnotation(clazz, org.springframework.stereotype.Repository.class) != null) {
+                return "\t\t\t" + LOG_PREFIX + message;
+            } else {
+                return message;
+            }
+        } catch (ClassNotFoundException e) {
             return message;
         }
     }
