@@ -1,0 +1,42 @@
+@import url(common.css);
+
+/*---------------------------------*/
+div {
+    padding: 2px;
+}
+
+div.topregion {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    max-width: 100%;
+    min-height: 150px;
+    max-height: 20%;
+}
+
+div.middleregion {
+    background: #000000;
+    border: 1px solid #ddd;
+    max-width: 100%;
+    min-height: 90%;
+}
+
+div.leftmenu {
+    background: #f5f505;
+    border: 1px solid #ddd;
+    min-width: 200px;
+    max-width: 10%;
+    height: 90%;
+    float: left;
+}
+
+div.navigation {
+    background: #a5f5a5;
+    border: 1px solid #ddd;
+    max-width: 100%;
+    min-height: 30px;
+    height: 5%;
+    /*    float: left;*/
+}
+
+
+
